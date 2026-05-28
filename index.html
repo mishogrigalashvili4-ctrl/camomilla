@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="ka" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camomilla | Pizzeria & Cafe Mtskheta</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Premium Google Fonts for Italian Pizzeria Aesthetic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+GO:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,500&family=Lora:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Fira GO', 'Lora', serif;
+            background-color: #FDFBF7; /* Authentic fresh flour/dough warm cream */
+        }
+        .serif-title {
+            font-family: 'Playfair Display', serif;
+        }
+        .body-serif {
+            font-family: 'Lora', serif;
+        }
+        /* Italian Checkerboard Pattern Background */
+        .checkerboard-pattern {
+            background-color: #ffffff;
+            background-image: radial-gradient(#8C251C 15%, transparent 16%),
+                              radial-gradient(#8C251C 15%, transparent 16%);
+            background-size: 16px 16px;
+            background-position: 0 0, 8px 8px;
+            opacity: 0.08;
+        }
+        /* Hide scrollbars for slick modern look */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* Custom slide/fade transition helper classes */
+        .fade-in {
+            animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="text-[#2C2520] min-h-screen flex flex-col selection:bg-orange-100 selection:text-orange-900 pb-24">
+
+    <!-- Top Banner: Classic Italian Pizzeria Header -->
+    <div class="bg-[#8C251C] text-white text-xs py-2.5 px-4 flex justify-between items-center sticky top-0 z-50 shadow-md">
+        <div class="flex items-center gap-1.5">
+            <i data-lucide="flame" class="w-4 h-4 text-orange-400 animate-pulse"></i>
+            <span id="header-loc" class="font-medium tracking-wide text-orange-100">მცხეთა, საქართველო • Wood-Fired Kitchen</span>
+        </div>
+        <button onclick="toggleLanguage()" class="bg-[#6E1C15] hover:bg-[#571610] text-white px-3 py-1 rounded-md font-bold tracking-wider transition-all text-[11px] uppercase border border-red-900/40">
+            <span id="lang-btn-text">EN</span>
+        </button>
+    </div>
+
+    <!-- Main Pizzeria Brand Showcase -->
+    <header class="relative overflow-hidden bg-gradient-to-b from-[#FFFDF9] to-[#FAF6F0] pt-14 pb-12 text-center border-b-4 border-double border-[#8C251C]/30">
+        <!-- Checkerboard decorative stripes on top and bottom of header -->
+        <div class="absolute inset-x-0 top-0 h-2 checkerboard-pattern"></div>
+        <div class="absolute inset-x-0 bottom-0 h-2 checkerboard-pattern"></div>
+
+        <div class="max-w-5xl mx-auto px-4 relative z-10 cursor-pointer" onclick="resetToDashboard()">
+            <!-- Pizzeria Rustic Badge Logo -->
+            <div class="mx-auto w-20 h-20 rounded-full border-2 border-dashed border-[#8C251C] flex items-center justify-center mb-4 hover:scale-105 transition-all duration-300 bg-white shadow-md">
+                <div class="w-16 h-16 rounded-full bg-[#8C251C] flex items-center justify-center text-white">
+                    <i data-lucide="pizza" class="w-8 h-8 text-orange-200"></i>
+                </div>
+            </div>
+            <h1 class="serif-title text-6xl font-extrabold text-[#3E110B] tracking-tight leading-none mb-2">Camomilla</h1>
+            <p id="hero-tagline" class="text-xs uppercase tracking-[0.25em] font-extrabold text-[#8C251C]">პიცერია & კაფე • Wood-Fired Pizzeria</p>
+            <div class="flex items-center justify-center gap-2 mt-3 text-xs text-stone-500 italic">
+                <span>Mtskheta</span>
+                <span class="text-[#8C251C]">•</span>
+                <span id="since-est">დაარსდა 2026 / Est. 2026</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Global Search & Navigation Control Center (Sticky) -->
+    <div class="sticky top-[38px] z-40 bg-[#FDFBF7]/95 backdrop-blur-md border-b border-[#8C251C]/10 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 py-4">
+            <!-- Search input triggers dynamic category page search or broad dashboard search -->
+            <div class="relative max-w-xl mx-auto">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-[#8C251C]/60">
+                    <i data-lucide="search" class="w-4 h-4"></i>
+                </span>
+                <input type="text" id="menu-search" oninput="handleSearch()" placeholder="მოძებნე მენიუში... / Search menu..." class="w-full pl-10 pr-4 py-2.5 bg-white rounded-lg text-sm border-2 border-[#8C251C]/15 focus:outline-none focus:ring-1 focus:ring-[#8C251C] focus:border-[#8C251C] transition-all placeholder:text-stone-400">
+            </div>
+
+            <!-- Sticky Mini horizontal bar - visible when browsing foods -->
+            <div id="sticky-mini-tabs" class="hidden mt-4 gap-2 overflow-x-auto no-scrollbar pb-1 fade-in">
+                <!-- Injected dynamically based on active category context -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Search Results Warning Notification -->
+    <div id="no-results" class="hidden text-center py-16 max-w-5xl mx-auto">
+        <i data-lucide="search" class="w-10 h-10 mx-auto mb-3 text-[#8C251C] opacity-40"></i>
+        <p class="text-stone-500 text-sm font-medium" id="no-results-text">შედეგები ვერ მოიძებნა</p>
+    </div>
+
+    <!-- Main Dynamic Interface Container -->
+    <main class="max-w-5xl mx-auto px-4 py-6 flex-grow w-full">
+        
+        <!-- SECTION 1: Dynamic Home Dashboard -->
+        <div id="dashboard-view" class="space-y-6 fade-in">
+            <div class="text-center space-y-1 mb-6">
+                <div class="text-orange-600 flex justify-center gap-1 text-sm">
+                    <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                    <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                    <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                    <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                    <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                </div>
+                <h2 id="choose-cat-title" class="serif-title text-2xl font-bold text-[#3E110B]">მენიუს კატეგორიები</h2>
+                <p id="choose-cat-sub" class="text-xs text-[#8C251C] uppercase tracking-widest font-extrabold opacity-80">აირჩიეთ კერძი</p>
+            </div>
+            
+            <!-- Category Cards Grid - Upgraded to responsive grid sizes -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6" id="categories-grid">
+                <!-- Dynamically generated visual cards -->
+            </div>
+        </div>
+
+        <!-- SECTION 2: Dynamic Single Food Category View -->
+        <div id="single-category-view" class="hidden space-y-6">
+            <!-- Back to dashboard controls -->
+            <div class="flex justify-start">
+                <button onclick="resetToDashboard()" class="flex items-center gap-2 text-xs font-bold tracking-wider uppercase text-[#3E110B] bg-white border-2 border-[#8C251C]/20 px-5 py-2.5 rounded-lg hover:bg-orange-50 active:scale-97 transition-all shadow-sm">
+                    <i data-lucide="arrow-left" class="w-4 h-4 text-[#8C251C]"></i>
+                    <span id="back-to-all-label">ყველა კატეგორია</span>
+                </button>
+            </div>
+
+            <!-- Render target container for the active selected category and its items -->
+            <div id="active-category-container" class="fade-in"></div>
+        </div>
+    </main>
+
+    <!-- Interactive Bill / Order Estimator Bar (Sticky Bottom) -->
+    <div id="bill-bar" class="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-[#8C251C]/20 py-4 px-4 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] transform translate-y-full transition-transform duration-300 z-50">
+        <div class="max-w-5xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="relative">
+                    <div class="bg-[#8C251C] text-white rounded-lg w-12 h-12 flex items-center justify-center font-bold text-sm shadow-sm">
+                        <i data-lucide="chef-hat" class="w-6 h-6 text-orange-200"></i>
+                        <span id="cart-count" class="absolute -top-1.5 -right-1.5 bg-orange-500 text-white text-[10px] w-5.5 h-5.5 rounded-full flex items-center justify-center font-bold border-2 border-white shadow">0</span>
+                    </div>
+                </div>
+                <div>
+                    <p id="bill-estimate-title" class="text-[10px] text-stone-500 font-bold uppercase tracking-wider">ჩემი შეკვეთა</p>
+                    <p class="font-extrabold text-xl text-[#3E110B] flex items-baseline gap-1">
+                        <span id="cart-total">0.00</span> ₾
+                    </p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="clearCart()" class="text-xs text-stone-500 font-bold hover:text-red-800 transition-colors uppercase tracking-wider" id="clear-btn">
+                    გასუფთავება
+                </button>
+                <button onclick="toggleCartModal(true)" class="bg-[#8C251C] hover:bg-[#721E16] text-white text-xs font-bold tracking-wider uppercase px-5 py-3 rounded-lg shadow-md transition-all flex items-center gap-2">
+                    <span id="view-order-btn">ნახვა</span>
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Detailed Order/Cart Modal -->
+    <div id="cart-modal" class="fixed inset-0 bg-[#3E110B]/50 backdrop-blur-xs z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-white w-full sm:max-w-md rounded-t-2xl sm:rounded-xl shadow-2xl overflow-hidden max-h-[85vh] flex flex-col transform translate-y-full transition-transform duration-300 border border-[#8C251C]/15">
+            <div class="bg-[#8C251C] text-white p-4.5 flex items-center justify-between border-b border-red-955">
+                <h3 class="font-bold text-sm uppercase tracking-widest flex items-center gap-2.5">
+                    <i data-lucide="clipboard-list" class="w-4 h-4 text-orange-200"></i>
+                    <span id="modal-title">თქვენი შეკვეთის სია</span>
+                </h3>
+                <button onclick="toggleCartModal(false)" class="text-orange-200 hover:text-white bg-white/10 p-1.5 rounded-lg transition-colors">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <div id="cart-modal-items" class="p-5 overflow-y-auto space-y-4 flex-grow max-h-[50vh]">
+                <!-- Cart items generated via JavaScript -->
+            </div>
+            <div class="bg-[#FAF6F0] p-5 border-t border-stone-200 space-y-4">
+                <div class="flex justify-between items-center">
+                    <span class="text-[#3E110B] text-sm uppercase tracking-wider font-extrabold" id="subtotal-label">ჯამი:</span>
+                    <span class="font-extrabold text-[#8C251C] text-2xl"><span id="modal-total">0.00</span> ₾</span>
+                </div>
+                <div class="bg-white text-stone-600 p-3.5 rounded-lg border border-[#8C251C]/15 text-xs leading-relaxed flex items-start gap-2.5">
+                    <i data-lucide="info" class="w-4 h-4 text-orange-600 shrink-0 mt-0.5"></i>
+                    <p id="modal-tip">ეს არის შეკვეთის კალკულატორი. მენიუდან არჩეული კერძები წარუდგინეთ ოფიციანტს შეკვეთისას.</p>
+                </div>
+                <button onclick="toggleCartModal(false)" class="w-full bg-[#8C251C] hover:bg-[#721E16] text-white font-bold tracking-wider uppercase py-3.5 rounded-lg transition-all shadow-md text-xs text-center" id="close-modal-btn">
+                    მენიუში დაბრუნება
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Beautiful Cozy Pizzeria Footer & Contact Info -->
+    <footer class="bg-[#1E1C1A] text-stone-300 pt-16 pb-24 border-t-4 border-[#8C251C] relative">
+        <!-- Checkerboard Stripe on Footer -->
+        <div class="absolute inset-x-0 top-0 h-2 checkerboard-pattern"></div>
+        
+        <div class="max-w-5xl mx-auto px-6 space-y-10 text-center">
+            <!-- Branding Motif -->
+            <div class="space-y-3">
+                <div class="mx-auto w-12 h-12 rounded-full border border-dashed border-[#8C251C] flex items-center justify-center bg-stone-900">
+                    <span class="serif-title text-[#8C251C] font-extrabold text-lg">C</span>
+                </div>
+                <h2 class="serif-title text-3xl font-bold tracking-wide text-white">Camomilla</h2>
+                <p id="footer-tagline" class="text-[10px] uppercase tracking-[0.25em] text-stone-400">მცხეთა, საქართველო • Pizzeria & Café</p>
+            </div>
+
+            <div class="w-12 h-[1px] bg-stone-800 mx-auto"></div>
+
+            <!-- Essential Info Items: Upgraded to a multi-column responsive layout -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 text-center">
+                <!-- Location -->
+                <div class="space-y-1.5">
+                    <p class="text-[#8C251C] font-extrabold uppercase tracking-widest text-[10px]" id="footer-loc-label">მდებარეობა</p>
+                    <p class="text-white text-sm font-semibold">მცხეთა, საქართველო</p>
+                    <p class="text-[10px] text-stone-500">Mtskheta, Georgia - Near Historic Center</p>
+                </div>
+
+                <!-- Hours -->
+                <div class="space-y-1.5">
+                    <p class="text-[#8C251C] font-extrabold uppercase tracking-widest text-[10px]" id="footer-hours-label">სამუშაო საათები</p>
+                    <p class="text-white text-sm font-bold">ყოველდღე: 11:00 - 23:00</p>
+                    <p class="text-[10px] text-stone-500">Everyday: 11:00 AM - 11:00 PM</p>
+                </div>
+
+                <!-- Phone -->
+                <div class="space-y-1.5">
+                    <p class="text-[#8C251C] font-extrabold uppercase tracking-widest text-[10px]" id="footer-phone-label">ტელეფონი</p>
+                    <a href="tel:+995XXXXXXXXX" class="text-white text-xl font-extrabold hover:text-orange-400 transition-colors block">+995 XXX XXX XXX</a>
+                    <span class="text-[9px] text-stone-500" id="footer-phone-tip">(დააჭირე დასარეკად)</span>
+                </div>
+            </div>
+
+            <div class="w-12 h-[1px] bg-stone-800 mx-auto"></div>
+
+            <!-- Footer Small Credits -->
+            <div class="space-y-1 text-[10px] text-stone-600">
+                <p>© 2026 Camomilla Mtskheta. All Rights Reserved.</p>
+                <p class="italic text-stone-500">Wood-Fired Pizza, Traditional Baking & Cozy Atmosphere</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Core Interactive Application Script -->
+    <script>
+        // Language state
+        let currentLang = 'ka'; // 'ka' (Georgian) or 'en' (English)
+        let activeCategoryId = null; // null represents the categories dashboard grid
+
+        // Entire Bilingual Menu Model with food-first line vector icons
+        const menuData = [
+            {
+                id: "pizza",
+                title: { ka: "პიცა", en: "Pizza" },
+                icon: "pizza",
+                desc: { ka: "ქვაზე გამომცხვარი იტალიური პიცა", en: "Stone-baked authentic Italian pizza" },
+                items: [
+                    { id: "pz_1", title: { ka: "პეპერონი", en: "Pepperoni" }, price: 25.00, desc: { ka: "ტომატის სოუსი, მოცარელა, პეპერონი", en: "Tomato sauce, mozzarella, pepperoni" } },
+                    { id: "pz_2", title: { ka: "მარგარიტა", en: "Margherita" }, price: 23.00, desc: { ka: "ტომატის სოუსი, მოცარელა, პარმეზანი", en: "Tomato sauce, mozzarella, parmesan" } },
+                    { id: "pz_3", title: { ka: "ოთხი ყველი", en: "Four Cheese" }, price: 27.00, desc: { ka: "მოცარელა, პარმეზანი, ჩედარი, ლურჯი ყველი", en: "Mozzarella, parmesan, cheddar, blue cheese" } },
+                    { id: "pz_4", title: { ka: "ვეგეტარიანული", en: "Vegetarian" }, price: 23.00, desc: { ka: "ტომატის სოუსი, სოკო, ხახვი, ზეთისხილი, ბულგარული, პომიდორი", en: "Tomato sauce, mushroom, onion, olives, bell pepper, tomato" } },
+                    { id: "pz_5", title: { ka: "პროშუტო", en: "Prosciutto" }, price: 29.00, desc: { ka: "ტომატის სოუსი, მოცარელა, პროშუტო, სოკო", en: "Tomato sauce, mozzarella, prosciutto, mushroom" } },
+                    { id: "pz_6", title: { ka: "სალამი", en: "Salami" }, price: 25.00, desc: { ka: "ტომატის სოუსი, მოცარელა, სალამი", en: "Tomato sauce, mozzarella, salami" } },
+                    { id: "pz_7", title: { ka: "ქათამი", en: "Chicken Pizza" }, price: 25.00, desc: { ka: "ტომატის სოუსი, მოცარელა, შებოლილი ქათმის ფილე, პომიდორი", en: "Tomato sauce, mozzarella, smoked chicken fillet, tomato" } },
+                    { id: "pz_8", title: { ka: "კამომილა", en: "Camomilla Signature" }, price: 31.00, desc: { ka: "ტომატის სოუსი, 2x მოცარელა, პროშუტო, პეპერონი, სოკო, ზეთისხილი", en: "Tomato sauce, 2x mozzarella, prosciutto, pepperoni, mushroom, olives" } }
+                ]
+            },
+            {
+                id: "kids_menu",
+                title: { ka: "საბავშვო მენიუ", en: "Kids Menu" },
+                icon: "sparkles",
+                desc: { ka: "პატარა პიცები ბავშვებისთვის", en: "Miniature pizzas for the little ones" },
+                items: [
+                    { id: "km_1", title: { ka: "საბავშვო პეპერონი", en: "Kids Pepperoni" }, price: 10.00, desc: { ka: "ტომატის სოუსი, მოცარელა, პეპერონი", en: "Tomato sauce, mozzarella, pepperoni" } },
+                    { id: "km_2", title: { ka: "საბავშვო მარგარიტა", en: "Kids Margherita" }, price: 9.50, desc: { ka: "ტომატის სოუსი, მოცარელა, პარმეზანი", en: "Tomato sauce, mozzarella, parmesan" } },
+                    { id: "km_3", title: { ka: "საბავშვო ოთხი ყველი", en: "Kids Four Cheese" }, price: 10.00, desc: { ka: "მოცარელა, პარმეზანი, ჩედარი, ლურჯი ყველი", en: "Mozzarella, parmesan, cheddar, blue cheese" } },
+                    { id: "km_4", title: { ka: "საბავშვო ვეგეტარიანული", en: "Kids Vegetarian" }, price: 9.50, desc: { ka: "ტომატის სოუსი, სოკო, ხახვი, ზეთისხილი, ბულგარული, პომიდორი", en: "Tomato sauce, mushroom, onion, olives, bell pepper, tomato" } },
+                    { id: "km_5", title: { ka: "საბავშვო პროშუტო", en: "Kids Prosciutto" }, price: 11.00, desc: { ka: "ტომატის სოუსი, მოცარელა, პროშუტო, სოკო", en: "Tomato sauce, mozzarella, prosciutto, mushroom" } },
+                    { id: "km_6", title: { ka: "საბავშვო სალამი", en: "Kids Salami" }, price: 10.00, desc: { ka: "ტომატის სოუსი, მოცარელა, სალამი", en: "Tomato sauce, mozzarella, salami" } },
+                    { id: "km_7", title: { ka: "საბავშვო ქათამი", en: "Kids Chicken" }, price: 10.00, desc: { ka: "ტომატის სოუსი, მოცარელა, შებოლილი ქათმის ფილე, პომიდორი", en: "Tomato sauce, mozzarella, smoked chicken fillet, tomato" } },
+                    { id: "km_8", title: { ka: "საბავშვო კამომილა", en: "Kids Camomilla" }, price: 12.00, desc: { ka: "ტომატის სოუსი, 2x მოცარელა, პროშუტო, პეპერონი, სოკო, ზეთისხილი", en: "Tomato sauce, 2x mozzarella, prosciutto, pepperoni, mushroom, olives" } }
+                ]
+            },
+            {
+                id: "mains",
+                title: { ka: "მთავარი კერძი", en: "Main Course" },
+                icon: "cooking-pot",
+                desc: { ka: "ხაჭაპური და ცხელი საფირმო კერძები", en: "Khachapuri & delicious hot specialties" },
+                items: [
+                    { id: "mc_1", title: { ka: "სმეშ ბურგერი", en: "Smash Burger" }, price: 24.00, desc: { ka: "საქონლის ხორცი, ყველი, კარამელიზირებული ხახვი", en: "Beef, cheese, caramelized onions" } },
+                    { id: "mc_2", title: { ka: "ქლაბ სენდვიჩი", en: "Club Sandwich" }, price: 20.00, desc: { ka: "კლასიკური ქლაბ სენდვიჩი ფრით", en: "Classic club sandwich served with crispy fries" } },
+                    { id: "mc_3", title: { ka: "იმერული ხაჭაპური", en: "Imeruli Khachapuri" }, price: 20.00, desc: { ka: "ტრადიციული იმერული ყველით გამომცხვარი ცომი", en: "Traditional Georgian bread filled with melted Imeretian cheese" } },
+                    { id: "mc_4", title: { ka: "მეგრული ხაჭაპური", en: "Megruli Khachapuri" }, price: 22.00, desc: { ka: "ხაჭაპური დამატებითი ყველის ფენით ზემოდან", en: "Khachapuri topped with an extra layer of golden-baked cheese" } },
+                    { id: "mc_5", title: { ka: "აჭარული ხაჭაპური", en: "Adjaruli Khachapuri" }, price: 17.00, desc: { ka: "ნავის ფორმის ხაჭაპური ყველით, კვერცხის გულითა და კარაქით", en: "Boat-shaped bread with rich hot cheese, butter, and raw egg yolk" } },
+                    { id: "mc_6", title: { ka: "ლობიანი", en: "Lobiani" }, price: 15.00, desc: { ka: "ლობიოს შიგთავსით გამომცხვარი ტრადიციული პური", en: "Georgian flatbread baked with savory seasoned bean filling" } },
+                    { id: "mc_7", title: { ka: "ცხელი პური ყველთან ერთად", en: "Hot Bread with Cheese" }, price: 15.00, desc: { ka: "ახლად გამომცხვარი ქართული შოთის პური და ყველი", en: "Freshly baked hot Georgian bread served with local cheese" } }
+                ]
+            },
+            {
+                id: "salads",
+                title: { ka: "სალათი", en: "Salad" },
+                icon: "sprout",
+                desc: { ka: "ახალი, ნატურალური ბოსტნეული", en: "Freshly sourced organic farm salads" },
+                items: [
+                    { id: "sl_1", title: { ka: "ქართული სალათი", en: "Georgian Salad" }, price: 13.00, desc: { ka: "ახალი კიტრი, პომიდორი და მწვანილი", en: "Fresh cucumbers, juicy tomatoes, and vibrant local herbs" } },
+                    { id: "sl_2", title: { ka: "ქართული სალათი ნიგვზით", en: "Georgian Salad with Walnuts" }, price: 15.00, desc: { ka: "კიტრი და პომიდორი ქართული ნიგვზის საკაზმით", en: "Cucumbers and tomatoes dressed with rich Georgian walnut paste" } },
+                    { id: "sl_3", title: { ka: "ბერძნული სალათი", en: "Greek Salad" }, price: 19.00, desc: { ka: "ფეტა, პომიდორი, კიტრი, ზეთისხილი, ზეითუნის ზეთი", en: "Feta cheese, ripe tomatoes, crisp cucumber, olives, olive oil" } },
+                    { id: "sl_4", title: { ka: "ავოკადოს სალათი", en: "Avocado Salad" }, price: 17.00, desc: { ka: "ახალი ავოკადო, მწვანილი და მსუბუქი სოუსი", en: "Fresh avocado, mixed greens, and light dressing" } },
+                    { id: "sl_5", title: { ka: "ცეზარი", en: "Caesar Salad" }, price: 25.00, desc: { ka: "ქათმის ფილე, აისბერგი, კრუტონები, პარმეზანი, ცეზარის სოუსი", en: "Chicken fillet, iceberg, crunchy croutons, parmesan, Caesar dressing" } }
+                ]
+            },
+            {
+                id: "desserts",
+                title: { ka: "დესერტი", en: "Dessert" },
+                icon: "ice-cream",
+                desc: { ka: "ტკბილეული და ბელგიური ვაფლები", en: "Sweet treats and warm Belgian waffles" },
+                items: [
+                    { id: "ds_1", title: { ka: "ბელგიური ვაფლი (ნუტელა, ნაყინი)", en: "Belgian Waffle (Nutella, Ice cream)" }, price: 15.00, desc: { ka: "თბილი ვაფლი ნუტელათი და ნაყინის ბურთულით", en: "Warm waffle topped with Nutella and premium ice cream scoop" } },
+                    { id: "ds_2", title: { ka: "ბელგიური ვაფლი ხილით", en: "Belgian Waffle with Fruit" }, price: 17.00, desc: { ka: "ნუტელა, ნაყინი და სეზონური ხილი", en: "Nutella, ice cream, and fresh seasonal fruit slices" } },
+                    { id: "ds_3", title: { ka: "კრუასანი", en: "Croissant" }, price: 6.00, desc: { ka: "ახლად გამომცხვარი ფრანგული კრუასანი", en: "Freshly baked flaky French croissant" } },
+                    { id: "ds_4", title: { ka: "ნაყინი ჭიქაში", en: "Ice Cream in Cup" }, price: 5.00, desc: { ka: "ნაყინის ასორტი", en: "Assorted ice cream scoops served in a cup" } },
+                    { id: "ds_5", title: { ka: "ნაყინი ვაფლში", en: "Ice Cream in Cone" }, price: 4.00, desc: { ka: "უგემრიელესი ნაყინი ვაფლის ჭიქაში", en: "Delicious ice cream scoop in a crispy waffle cone" } }
+                ]
+            },
+            {
+                id: "lemonades",
+                title: { ka: "ლიმონათი", en: "Lemonade" },
+                icon: "glass-water",
+                desc: { ka: "ხელნაკეთი გამაგრილებელი ლიმონათები", en: "Craft house-made cooling lemonades" },
+                items: [
+                    { id: "lm_1", title: { ka: "პიტნა და ლაიმი", en: "Mint & Lime" }, price: "10.00 / 28.00", singlePrice: 10.00, desc: { ka: "ჭიქა / გრაფინი", en: "Glass / Carafe" } },
+                    { id: "lm_2", title: { ka: "მარწყვის ლიმონათი", en: "Strawberry Lemonade" }, price: "10.00 / 28.00", singlePrice: 10.00, desc: { ka: "ჭიქა / გრაფინი", en: "Glass / Carafe" } },
+                    { id: "lm_3", title: { ka: "მარაკუიას ლიმონათი", en: "Passion Fruit Lemonade" }, price: "10.00 / 28.00", singlePrice: 10.00, desc: { ka: "ჭიქა / გრაფინი", en: "Glass / Carafe" } },
+                    { id: "lm_4", title: { ka: "კენკრის ლიმონათი", en: "Berry Lemonade" }, price: "10.00 / 28.00", singlePrice: 10.00, desc: { ka: "ჭიქა / გრაფინი", en: "Glass / Carafe" } }
+                ]
+            },
+            {
+                id: "cold_drinks",
+                title: { ka: "ცივი სასმელი", en: "Cold Drinks" },
+                icon: "cup-soda",
+                desc: { ka: "გამაგრილებელი მინერალური წყლები", en: "Chilled soft drinks & spring water" },
+                items: [
+                    { id: "cd_1", title: { ka: "კოკა კოლა", en: "Coca-Cola" }, price: 3.00, desc: { ka: "გაციებული კლასიკური სასმელი", en: "Chilled classic cola drink" } },
+                    { id: "cd_2", title: { ka: "ფანტა", en: "Fanta" }, price: 3.00, desc: { ka: "ნარინჯისფერი ხალისი", en: "Orange carbonated refresh" } },
+                    { id: "cd_3", title: { ka: "სპრაიტი", en: "Sprite" }, price: 3.00, desc: { ka: "ლიმონ-ლაიმის სიგრილე", en: "Crisp lemon-lime splash" } },
+                    { id: "cd_4", title: { ka: "წყალი", en: "Water" }, price: 2.00, desc: { ka: "წყაროს წყალი", en: "Pure spring water" } },
+                    { id: "cd_5", title: { ka: "შვეფსი", en: "Schweppes" }, price: 3.00, desc: { ka: "ტონიკი", en: "Classic tonic water" } },
+                    { id: "cd_6", title: { ka: "ნაბეღლავი", en: "Nabeghlavi" }, price: 3.00, desc: { ka: "ნახშირწყლოვანი მინერალური წყალი", en: "Mineral sparkling mineral water" } },
+                    { id: "cd_7", title: { ka: "ბორჯომი", en: "Borjomi" }, price: 3.00, desc: { ka: "ლეგენდარული ვულკანური მინერალური წყალი", en: "Legendary volcanic mineral water" } },
+                    { id: "cd_8", title: { ka: "ბორჯომის ლიმონათი", en: "Borjomi Lemonade" }, price: 5.00, desc: { ka: "ქართული ხილის არომატული ლიმონათი", en: "Premium flavored Georgian fruit lemonade" } }
+                ]
+            },
+            {
+                id: "fresh_juices",
+                title: { ka: "ფრეშ წვენი", en: "Fresh Juice" },
+                icon: "droplet",
+                desc: { ka: "ახლად გამოწურული ნატურალური წვენი", en: "Squeezed to order organic fruit juices" },
+                items: [
+                    { id: "fj_1", title: { ka: "ფორთოხლის ფრეში", en: "Fresh Orange Juice" }, price: 15.00, desc: { ka: "გამოწურული ფორთოხალი", en: "Freshly squeezed oranges" } },
+                    { id: "fj_2", title: { ka: "ვაშლის ფრეში", en: "Fresh Apple Juice" }, price: 15.00, desc: { ka: "გამოწურული ვაშლი", en: "Freshly cold-pressed apples" } },
+                    { id: "fj_3", title: { ka: "ატმის წვენი", en: "Peach Juice" }, price: 15.00, desc: { ka: "ნატურალური ატმის წვენი", en: "Rich natural peach nectar" } },
+                    { id: "fj_4", title: { ka: "გრიფრუტის ფრეში", en: "Fresh Grapefruit Juice" }, price: 16.00, desc: { ka: "გამოწურული გრეიფრუტი", en: "Tart and freshly squeezed grapefruit" } },
+                    { id: "fj_5", title: { ka: "ფრეშ მიქსი", en: "Fresh Mix Juice" }, price: 16.00, desc: { ka: "სეზონური ხილის ნაზავი", en: "Vibrant blend of seasonal pressed fruits" } }
+                ]
+            },
+            {
+                id: "sides",
+                title: { ka: "გარნირი", en: "Sides" },
+                icon: "disc",
+                desc: { ka: "ხრაშუნა კარტოფილი ფრი და ყველის ჩხირები", en: "Crispy skin-on fries and hot cheese appetizers" },
+                items: [
+                    { id: "sd_1", title: { ka: "კლასიკური ფრი", en: "Classic French Fries" }, price: "4.00 / 6.00", singlePrice: 4.00, desc: { ka: "პატარა / დიდი", en: "Small / Large" } },
+                    { id: "sd_2", title: { ka: "ფრი ტრიუფელით", en: "Truffle French Fries" }, price: 8.00, desc: { ka: "ოქროსფერი ფრი ტრიუფელის არომატით", en: "Golden fries drizzled with aromatic truffle oil" } },
+                    { id: "sd_3", title: { ka: "ყველის ჩხირები", en: "Cheese Sticks" }, price: 12.00, desc: { ka: "ხრაშუნა გარედან, მდნარი შიგნიდან", en: "Crispy outer crust with hot melted cheese filling" } },
+                    { id: "sd_4", title: { ka: "მექსიკური კარტოფილი", en: "Mexican Potatoes" }, price: 10.00, desc: { ka: "შეზავებული პიკანტური სოუსით", en: "Spiced wedged potatoes with dipping sauce" } },
+                    { id: "sd_5", title: { ka: "ხახვის რგოლები", en: "Onion Rings" }, price: 7.00, desc: { ka: "ხრაშუნა ხახვის რგოლები სოუსთან ერთად", en: "Crispy breaded onion rings with garlic sauce" } }
+                ]
+            },
+            {
+                id: "coffee",
+                title: { ka: "ყავა & ჩაი", en: "Coffee & Tea" },
+                icon: "coffee",
+                desc: { ka: "არომატული ცხელი სასმელები", en: "Warm espressos, specialty lattes & teas" },
+                items: [
+                    { id: "cf_1", title: { ka: "ესპრესო", en: "Espresso" }, price: 5.00, desc: { ka: "კლასიკური არომატული ესპრესო", en: "Rich extraction of premium coffee" } },
+                    { id: "cf_2", title: { ka: "ამერიკანო", en: "Americano" }, price: 5.00, desc: { ka: "ესპრესო ცხელი წყლით", en: "Espresso shot topped with hot water" } },
+                    { id: "cf_3", title: { ka: "კაპუჩინო", en: "Cappuccino" }, price: 7.00, desc: { ka: "ესპრესო ქაფით", en: "Espresso with thick, velvety milk foam" } },
+                    { id: "cf_4", title: { ka: "ლატე", en: "Latte" }, price: 8.00, desc: { ka: "ნაზი რძიანი ყავა", en: "Mild and creamy coffee drink with milk" } },
+                    { id: "cf_5", title: { ka: "მაკიატო", en: "Macchiato" }, price: 6.00, desc: { ka: "ესპრესო რძის ქაფის წვეთით", en: "Espresso spotted with warm milk foam" } },
+                    { id: "cf_6", title: { ka: "აფოგატო", en: "Affogato" }, price: 10.00, desc: { ka: "ნაყინის ბურთულა ესპრესოს ორმაგი ჭიქით", en: "Vanilla scoop drowned in a double shot espresso" } },
+                    { id: "cf_7", title: { ka: "ფლეთ უაითი", en: "Flat White" }, price: 9.00, desc: { ka: "ორმაგი რიტრესტო რძით", en: "Double ristretto shot with microfoam milk" } },
+                    { id: "cf_8", title: { ka: "ბამბლი", en: "Bumble Coffee" }, price: 14.00, desc: { ka: "ესპრესო, ფორთოხლის წვენი, კარამელი", en: "Espresso with fresh orange juice and sweet caramel" } },
+                    { id: "cf_9", title: { ka: "მოკაჩინო", en: "Mocaccino" }, price: 17.00, desc: { ka: "ესპრესო, ცხელი შოკოლადი, რძე", en: "Espresso combined with rich hot chocolate and steamed milk" } },
+                    { id: "cf_10", title: { ka: "თურქული ყავა", en: "Turkish Coffee" }, price: 5.00, desc: { ka: "ტრადიციული ქვიშაზე მომზადებული ყავა", en: "Richly brewed traditional coffee" } },
+                    { id: "cf_11", title: { ka: "ცივი ყავა", en: "Iced Coffee" }, price: 7.00, desc: { ka: "გამაგრილებელი ცივი ყავა ყინულით", en: "Refreshing iced espresso milk blend" } },
+                    { id: "cf_12", title: { ka: "ცივი ყავა ნაყინით", en: "Iced Coffee with Ice Cream" }, price: 13.00, desc: { ka: "ცივი ყავა ვანილის ნაყინთან ერთად", en: "Indulgent iced coffee capped with a vanilla scoop" } },
+                    { id: "cf_13", title: { ka: "ყავა ბეილისით", en: "Irish Baileys Coffee" }, price: 14.00, desc: { ka: "ყავა ბეილისის კრემ-ლიქიორით", en: "Rich hot coffee spiked with Baileys Irish Cream" } },
+                    { id: "cf_14", title: { ka: "ცხელი შოკოლადი", en: "Hot Chocolate" }, price: 10.00, desc: { ka: "მდნარი პრემიუმ კაკაო რძით", en: "Thick creamy steamed cocoa" } },
+                    { id: "cf_15", title: { ka: "ესპრესო ტონიკი", en: "Espresso Tonic" }, price: 8.00, desc: { ka: "ესპრესო, გაციებული ტონიკი, ყინული", en: "Espresso floated over chilled tonic and ice" } },
+                    { id: "cf_16", title: { ka: "ჩაი", en: "Tea Selection" }, price: 5.00, desc: { ka: "შავი, მწვანე, ხილი, პიტნა", en: "Black, Green, Berry Fruit, or Mint selection" } }
+                ]
+            },
+            {
+                id: "alcohol",
+                title: { ka: "ალკოჰოლი", en: "Alcohol" },
+                icon: "beer",
+                desc: { ka: "ლუდი და საფირმო კოქტეილები", en: "Cold crafts, draft beers & mixed cocktails" },
+                items: [
+                    { id: "al_1", title: { ka: "შავი ლომი", en: "Shavi Lomi Beer" }, price: 7.00, desc: { ka: "ქართული ხელნაკეთი ლუდი", en: "Local Georgian craft beer" } },
+                    { id: "al_2", title: { ka: "ბავარია", en: "Bavaria Beer" }, price: 8.00, desc: { ka: "კლასიკური ევროპული ლაგერი", en: "Premium imported European lager" } },
+                    { id: "al_3", title: { ka: "Vodka Red Bull", en: "Vodka Red Bull" }, price: 20.00, desc: { ka: "ენერგიული კოქტეილი", en: "Vibrant high-energy classic mix" } },
+                    { id: "al_4", title: { ka: "ჯეიმსონი", en: "Jameson" }, price: 17.00, desc: { ka: "ირლანდიური ვისკი", en: "Premium Irish triple-distilled whiskey" } },
+                    { id: "al_5", title: { ka: "ჯიმ ბიმი", en: "Jim Beam" }, price: 15.00, desc: { ka: "ამერიკული ბურბონი", en: "Traditional American Bourbon" } },
+                    { id: "al_6", title: { ka: "Absolut Vodka", en: "Absolut Vodka" }, price: 12.00, desc: { ka: "პრემიუმ შვედური არაყი", en: "Pure imported Swedish vodka" } },
+                    { id: "al_7", title: { ka: "ჭაჭა", en: "Chacha" }, price: 7.00, desc: { ka: "ტრადიციული ქართული ყურძნის არაყი", en: "Strong traditional Georgian grape pomace brandy" } },
+                    { id: "al_8", title: { ka: "ჯინტონიკი / თაფლის არაყი", en: "Gin Tonic / Honey Vodka" }, price: 8.00, desc: { ka: "არომატული კოქტეილები", en: "Aromatic gin tonic or sweet local honey shot" } },
+                    { id: "al_9", title: { ka: "ჰენესი", en: "Hennessy" }, price: 20.00, desc: { ka: "ფრანგული კონიაკი", en: "Aged premium French Cognac" } },
+                    { id: "al_10", title: { ka: "აპეროლი", en: "Aperol Spritz" }, price: 24.00, desc: { ka: "იტალიური გამაგრილებელი კოქტეილი", en: "Refreshing Italian bitter aperitif spritz" } },
+                    { id: "al_11", title: { ka: "მოჰიტო", en: "Mojito" }, price: 24.00, desc: { ka: "ლაიმი, პიტნა, რომი, სოდა", en: "Fresh lime, mint leaves, light rum, soda splash" } },
+                    { id: "al_12", title: { ka: "მარგარიტა", en: "Margarita" }, price: 24.00, desc: { ka: "ტეკილა, ლაიმი, ტრიპლ სეკი", en: "Classic Mexican tequila, fresh lime juice, triple sec" } }
+                ]
+            },
+            {
+                id: "wine",
+                title: { ka: "ღვინო", en: "Wine" },
+                icon: "wine",
+                desc: { ka: "ქართული ქვევრისა და რჩეული ღვინოები", en: "Traditional Qvevri & premium Georgian wines" },
+                items: [
+                    { id: "wn_1", title: { ka: "საფერავი", en: "Saperavi" }, price: 16.00, desc: { ka: "მშრალი წითელი ღვინო", en: "Robust dry red Georgian wine variety" } },
+                    { id: "wn_2", title: { ka: "ქინძმარაული", en: "Kindzmarauli" }, price: 16.00, desc: { ka: "ნახევრადტკბილი წითელი ღვინო", en: "Naturally semi-sweet red Georgian wine" } },
+                    { id: "wn_3", title: { ka: "ციცქა", en: "Tsitska" }, price: 16.00, desc: { ka: "მშრალი თეთრი ღვინო", en: "Crisp dry white Georgian heritage wine" } },
+                    { id: "wn_4", title: { ka: "წინანდალი", en: "Tsinandali" }, price: 15.00, desc: { ka: "თეთრი მშრალი ღვინო", en: "Classic white dry appellation wine" } },
+                    { id: "wn_5", title: { ka: "მწვანე", en: "Mtsvane" }, price: 15.00, desc: { ka: "თეთრი მშრალი ღვინო", en: "Bright dry aromatic white local wine" } },
+                    { id: "wn_6", title: { ka: "რქაწითელი", en: "Rkatsiteli" }, price: 16.00, desc: { ka: "თეთრი მშრალი ქვევრის ღვინო", en: "Traditional dry amber Qvevri white wine" } }
+                ]
+            }
+        ];
+
+        // UI Translation Data
+        const uiTranslations = {
+            ka: {
+                "header-loc": "მცხეთა, საქართველო • Wood-Fired Kitchen",
+                "lang-btn-text": "EN",
+                "hero-tagline": "პიცერია & კაფე • Wood-Fired Pizzeria",
+                "since-est": "დაარსდა 2026 / Est. 2026",
+                "choose-cat-title": "მენიუს კატეგორიები",
+                "choose-cat-sub": "აირჩიეთ კერძი",
+                "no-results-text": "შედეგები ვერ მოიძებნა 😔",
+                "back-to-all-label": "ყველა კატეგორია",
+                "bill-estimate-title": "ჩემი შეკვეთა",
+                "clear-btn": "გასუფთავება",
+                "view-order-btn": "ნახვა",
+                "modal-title": "თქვენი შეკვეთის სია",
+                "subtotal-label": "ჯამი:",
+                "modal-tip": "ეს არის შეკვეთის კალკულატორი. მენიუდან არჩეული კერძები წარუდგინეთ ოფიციანტს შეკვეთისას.",
+                "close-modal-btn": "მენიუში დაბრუნება",
+                "footer-loc-label": "მდებარეობა",
+                "footer-hours-label": "სამუშაო საათები",
+                "footer-phone-label": "ტელეფონი",
+                "footer-phone-tip": "(დააჭირე დასარეკად)",
+                "search-placeholder": "მოძებნე მენიუში... / Search menu...",
+                "add-btn": "დამატება",
+                "items-count-suffix": "კერძი"
+            },
+            en: {
+                "header-loc": "Mtskheta, Georgia • Wood-Fired Kitchen",
+                "lang-btn-text": "KA",
+                "hero-tagline": "Pizzeria & Café • Wood-Fired Kitchen",
+                "since-est": "Est. 2026",
+                "choose-cat-title": "Our Food Menu",
+                "choose-cat-sub": "Select a category below",
+                "no-results-text": "No matching dishes found",
+                "back-to-all-label": "All Categories",
+                "bill-estimate-title": "My Order Estimate",
+                "clear-btn": "Clear",
+                "view-order-btn": "View",
+                "modal-title": "Your Order Draft",
+                "subtotal-label": "Subtotal:",
+                "modal-tip": "This is a digital calculator. Simply present this list to your waiter to place your official order.",
+                "close-modal-btn": "Back to Menu",
+                "footer-loc-label": "Location",
+                "footer-hours-label": "Opening Hours",
+                "footer-phone-label": "Phone Number",
+                "footer-phone-tip": "(Tap to Call)",
+                "search-placeholder": "Search wood-fired pizzas, wines...",
+                "add-btn": "Add",
+                "items-count-suffix": "dishes"
+            }
+        };
+
+        // Cart State
+        let cart = {}; 
+
+        // Initializer
+        window.onload = function() {
+            renderDashboardGrid();
+            renderHorizontalStickyTabs();
+            updateUI();
+        };
+
+        // Switch Languages
+        function toggleLanguage() {
+            currentLang = currentLang === 'ka' ? 'en' : 'ka';
+            updateUI();
+            renderDashboardGrid();
+            renderHorizontalStickyTabs();
+            if (activeCategoryId) {
+                renderActiveCategory(activeCategoryId);
+            }
+        }
+
+        // Apply translations
+        function updateUI() {
+            const trans = uiTranslations[currentLang];
+            
+            document.getElementById("header-loc").innerHTML = `<i data-lucide="flame" class="w-4 h-4 text-orange-400 inline mr-1 animate-pulse"></i> ${trans["header-loc"]}`;
+            document.getElementById("lang-btn-text").textContent = trans["lang-btn-text"];
+            document.getElementById("hero-tagline").textContent = trans["hero-tagline"];
+            document.getElementById("since-est").textContent = trans["since-est"];
+            document.getElementById("choose-cat-title").textContent = trans["choose-cat-title"];
+            document.getElementById("choose-cat-sub").textContent = trans["choose-cat-sub"];
+            document.getElementById("no-results-text").textContent = trans["no-results-text"];
+            document.getElementById("back-to-all-label").textContent = trans["back-to-all-label"];
+            document.getElementById("bill-estimate-title").textContent = trans["bill-estimate-title"];
+            document.getElementById("clear-btn").textContent = trans["clear-btn"];
+            document.getElementById("view-order-btn").textContent = trans["view-order-btn"];
+            document.getElementById("modal-title").textContent = trans["modal-title"];
+            document.getElementById("subtotal-label").textContent = trans["subtotal-label"];
+            document.getElementById("modal-tip").textContent = trans["modal-tip"];
+            document.getElementById("close-modal-btn").textContent = trans["close-modal-btn"];
+            document.getElementById("footer-loc-label").textContent = trans["footer-loc-label"];
+            document.getElementById("footer-hours-label").textContent = trans["footer-hours-label"];
+            document.getElementById("footer-phone-label").textContent = trans["footer-phone-label"];
+            document.getElementById("footer-phone-tip").textContent = trans["footer-phone-tip"];
+            document.getElementById("menu-search").placeholder = trans["search-placeholder"];
+
+            lucide.createIcons();
+            updateCartDisplay();
+        }
+
+        // Generate the beautiful rustic category selection grid with fully fluid desktop sizing
+        function renderDashboardGrid() {
+            const grid = document.getElementById("categories-grid");
+            grid.innerHTML = '';
+
+            menuData.forEach(cat => {
+                const card = document.createElement("button");
+                card.onclick = () => selectCategory(cat.id);
+                // Enhanced classes: uses grid padding, responsive heights, and wider layouts for tablets & PCs
+                card.className = "flex flex-col items-center justify-center p-6 md:p-8 rounded-xl border-2 border-[#8C251C]/15 bg-white hover:border-[#8C251C] hover:bg-orange-50/20 hover:scale-[1.02] active:scale-97 transition-all text-center shadow-sm space-y-4 relative overflow-hidden group w-full";
+                
+                card.innerHTML = `
+                    <div class="w-14 h-14 md:w-16 md:h-16 rounded-full border-2 border-dashed border-[#8C251C]/30 bg-[#FAF6F0] flex items-center justify-center text-[#8C251C] group-hover:bg-[#8C251C] group-hover:text-white transition-all duration-300">
+                        <i data-lucide="${cat.icon}" class="w-6 h-6 md:w-7 md:h-7"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-[#3E110B] text-xs sm:text-sm md:text-base uppercase tracking-wider">${cat.title[currentLang]}</h3>
+                        <p class="text-[10px] md:text-xs text-stone-400 italic font-medium mt-1 leading-tight">${cat.desc[currentLang]}</p>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        // Render the quick horizontal sticky scroller inside open category views
+        function renderHorizontalStickyTabs() {
+            const scroller = document.getElementById("sticky-mini-tabs");
+            scroller.innerHTML = '';
+
+            menuData.forEach(cat => {
+                const tab = document.createElement("button");
+                tab.onclick = () => selectCategory(cat.id);
+                tab.className = `flex-shrink-0 flex items-center gap-2 px-4.5 py-2.5 rounded-lg border-2 text-[11px] font-bold uppercase tracking-wider transition-all shadow-xs ${
+                    activeCategoryId === cat.id 
+                    ? 'bg-[#8C251C] border-[#8C251C] text-white' 
+                    : 'bg-white border-stone-200 text-stone-700 hover:bg-orange-50/30'
+                }`;
+                tab.innerHTML = `<i data-lucide="${cat.icon}" class="w-4 h-4"></i> <span>${cat.title[currentLang]}</span>`;
+                scroller.appendChild(tab);
+            });
+            lucide.createIcons();
+        }
+
+        // Action when a Category gets selected/opened
+        function selectCategory(catId) {
+            activeCategoryId = catId;
+            
+            // Toggle view visibility
+            document.getElementById("dashboard-view").classList.add("hidden");
+            document.getElementById("single-category-view").classList.remove("hidden");
+            
+            // Show sticky fast switcher
+            const stickyTabs = document.getElementById("sticky-mini-tabs");
+            stickyTabs.classList.remove("hidden");
+            stickyTabs.classList.add("flex");
+
+            // Build out active contents
+            renderActiveCategory(catId);
+            renderHorizontalStickyTabs(); // update selected state indicator inside sticky scroller
+
+            // Scroll to top of category nicely
+            window.scrollTo({ top: 120, behavior: 'smooth' });
+        }
+
+        // Back to Dashboard click handler
+        function resetToDashboard() {
+            activeCategoryId = null;
+
+            document.getElementById("dashboard-view").classList.remove("hidden");
+            document.getElementById("single-category-view").classList.add("hidden");
+            
+            const stickyTabs = document.getElementById("sticky-mini-tabs");
+            stickyTabs.classList.add("hidden");
+            stickyTabs.classList.remove("flex");
+
+            // Empty search bar
+            document.getElementById("menu-search").value = '';
+            handleSearch();
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Render the list of food items belonging to the selected category (Splits into 2 elegant columns on PC!)
+        function renderActiveCategory(catId) {
+            const container = document.getElementById("active-category-container");
+            container.innerHTML = '';
+
+            const cat = menuData.find(c => c.id === catId);
+            if (!cat) return;
+
+            const card = document.createElement("div");
+            card.className = "bg-white rounded-xl p-6 md:p-8 shadow-sm border-2 border-[#8C251C]/10 relative overflow-hidden w-full";
+
+            // Rustic visual backing
+            const overlay = document.createElement("div");
+            overlay.className = "absolute top-0 inset-x-0 h-1.5 checkerboard-pattern";
+            card.appendChild(overlay);
+
+            // Header of the single view card
+            const header = document.createElement("div");
+            header.className = "flex items-center gap-3 border-b-2 border-[#8C251C]/20 pb-4 mb-6 mt-2";
+            header.innerHTML = `
+                <i data-lucide="${cat.icon}" class="w-7 h-7 text-[#8C251C]"></i>
+                <h2 class="serif-title text-3xl font-bold text-[#3E110B]">${cat.title[currentLang]}</h2>
+            `;
+            card.appendChild(header);
+
+            // Food Items details list - responsive grid (1 col on mobile, 2 columns on tablets/PCs!)
+            const itemsList = document.createElement("div");
+            itemsList.className = "grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6";
+
+            cat.items.forEach(item => {
+                const itemDiv = document.createElement("div");
+                itemDiv.className = "menu-item flex justify-between gap-4 group fade-in pb-4 border-b border-stone-100 md:border-b-0";
+                itemDiv.setAttribute("data-search-text", `${item.title.ka.toLowerCase()} ${item.title.en.toLowerCase()} ${item.desc.ka.toLowerCase()} ${item.desc.en.toLowerCase()}`);
+
+                const displayPrice = typeof item.price === 'number' ? `${item.price.toFixed(2)} ₾` : `${item.price} ₾`;
+
+                itemDiv.innerHTML = `
+                    <div class="flex-grow space-y-1">
+                        <h3 class="font-extrabold text-[#3E110B] text-base md:text-lg leading-tight group-hover:text-[#8C251C] transition-colors">${item.title[currentLang]}</h3>
+                        <p class="text-[12px] text-stone-550 font-medium leading-relaxed">${item.desc[currentLang]}</p>
+                    </div>
+                    <div class="flex flex-col items-end justify-between min-w-[105px] gap-2.5">
+                        <span class="font-extrabold text-[#8C251C] text-base md:text-lg">${displayPrice}</span>
+                        <button onclick="addToCart('${item.id}', '${item.title[currentLang]}', ${typeof item.price === 'number' ? item.price : item.singlePrice})" 
+                                class="text-[10px] font-bold px-4 py-1.5 rounded-lg bg-orange-50 hover:bg-[#8C251C] hover:text-white hover:border-[#8C251C] text-[#8C251C] transition-all border-2 border-[#8C251C]/20 flex items-center gap-1.5 active:scale-95 uppercase tracking-wider">
+                            <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                            <span>${uiTranslations[currentLang]["add-btn"]}</span>
+                        </button>
+                    </div>
+                `;
+                itemsList.appendChild(itemDiv);
+            });
+
+            card.appendChild(itemsList);
+            container.appendChild(card);
+            lucide.createIcons();
+        }
+
+        // Live Fuzzy Search Query Handler across active views
+        function handleSearch() {
+            const query = document.getElementById("menu-search").value.toLowerCase().trim();
+            
+            // If user types in search while on the dashboard home screen, we show all search matches globally!
+            if (activeCategoryId === null && query !== "") {
+                // Instantly open search results by dynamically showing an "All items search view"
+                renderSearchAllView(query);
+            } else if (activeCategoryId !== null) {
+                // If already inside a selected category, filter only within that active view
+                filterActiveCategoryItems(query);
+            } else if (query === "") {
+                // If cleared search from dashboard, make sure we go back to showing categories grid
+                resetToDashboard();
+            }
+        }
+
+        // Filters items inside a currently selected category
+        function filterActiveCategoryItems(query) {
+            const items = document.querySelectorAll(".menu-item");
+            let hasResults = false;
+
+            items.forEach(item => {
+                const searchText = item.getAttribute("data-search-text");
+                if (searchText.includes(query)) {
+                    item.style.display = "flex";
+                    hasResults = true;
+                } else {
+                    item.style.display = "none";
+                }
+            });
+
+            document.getElementById("no-results").style.display = hasResults ? "none" : "block";
+        }
+
+        // Broad search across ALL categories when user types directly on the dashboard
+        function renderSearchAllView(query) {
+            document.getElementById("dashboard-view").classList.add("hidden");
+            document.getElementById("single-category-view").classList.remove("hidden");
+
+            const container = document.getElementById("active-category-container");
+            container.innerHTML = '';
+
+            const wrapperCard = document.createElement("div");
+            wrapperCard.className = "bg-white rounded-xl p-6 md:p-8 shadow-xs border-2 border-[#8C251C]/10 space-y-6 relative overflow-hidden w-full";
+            
+            const overlay = document.createElement("div");
+            overlay.className = "absolute top-0 inset-x-0 h-1.5 checkerboard-pattern";
+            wrapperCard.appendChild(overlay);
+
+            let matchCount = 0;
+
+            menuData.forEach(cat => {
+                const matchingItems = cat.items.filter(item => {
+                    const searchStr = `${item.title.ka.toLowerCase()} ${item.title.en.toLowerCase()} ${item.desc.ka.toLowerCase()} ${item.desc.en.toLowerCase()}`;
+                    return searchStr.includes(query);
+                });
+
+                if (matchingItems.length > 0) {
+                    matchCount += matchingItems.length;
+
+                    const catBlock = document.createElement("div");
+                    catBlock.className = "space-y-4 pt-2";
+                    catBlock.innerHTML = `
+                        <div class="flex items-center gap-2 border-b-2 border-stone-100 pb-2">
+                            <i data-lucide="${cat.icon}" class="w-4 h-4 text-[#8C251C]"></i>
+                            <span class="font-extrabold text-[#3E110B] text-xs uppercase tracking-wider">${cat.title[currentLang]}</span>
+                        </div>
+                    `;
+
+                    // Dynamic multi-column list for search results on PC too
+                    const list = document.createElement("div");
+                    list.className = "grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4";
+
+                    matchingItems.forEach(item => {
+                        const itemDiv = document.createElement("div");
+                        itemDiv.className = "menu-item flex justify-between gap-4";
+                        const displayPrice = typeof item.price === 'number' ? `${item.price.toFixed(2)} ₾` : `${item.price} ₾`;
+
+                        itemDiv.innerHTML = `
+                            <div class="flex-grow">
+                                <h4 class="font-bold text-[#3E110B] text-sm">${item.title[currentLang]}</h4>
+                                <p class="text-[11px] text-stone-550 font-medium leading-relaxed">${item.desc[currentLang]}</p>
+                            </div>
+                            <div class="flex flex-col items-end justify-between min-w-[90px] gap-2">
+                                <span class="font-extrabold text-[#8C251C] text-sm">${displayPrice}</span>
+                                <button onclick="addToCart('${item.id}', '${item.title[currentLang]}', ${typeof item.price === 'number' ? item.price : item.singlePrice})" 
+                                        class="text-[10px] font-bold px-3 py-1.5 rounded-lg bg-orange-50 hover:bg-[#8C251C] hover:text-white hover:border-[#8C251C] text-[#8C251C] border-2 border-[#8C251C]/25 flex items-center gap-1 active:scale-95 uppercase tracking-wider">
+                                    <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                                    <span>${uiTranslations[currentLang]["add-btn"]}</span>
+                                </button>
+                            </div>
+                        `;
+                        list.appendChild(itemDiv);
+                    });
+
+                    catBlock.appendChild(list);
+                    wrapperCard.appendChild(catBlock);
+                }
+            });
+
+            if (matchCount > 0) {
+                container.appendChild(wrapperCard);
+                document.getElementById("no-results").style.display = "none";
+            } else {
+                document.getElementById("no-results").style.display = "block";
+            }
+            lucide.createIcons();
+        }
+
+        // Add item to calculator
+        function addToCart(itemId, itemTitle, itemPrice) {
+            if (cart[itemId]) {
+                cart[itemId].qty += 1;
+            } else {
+                cart[itemId] = {
+                    title: itemTitle,
+                    price: itemPrice,
+                    qty: 1
+                };
+            }
+            updateCartDisplay();
+            animateBillBar();
+        }
+
+        // Update current totals on interactive UI
+        function updateCartDisplay() {
+            let total = 0;
+            let count = 0;
+
+            for (const id in cart) {
+                total += cart[id].price * cart[id].qty;
+                count += cart[id].qty;
+            }
+
+            document.getElementById("cart-count").textContent = count;
+            document.getElementById("cart-total").textContent = total.toFixed(2);
+            document.getElementById("modal-total").textContent = total.toFixed(2);
+
+            const billBar = document.getElementById("bill-bar");
+            if (count > 0) {
+                billBar.style.transform = "translateY(0)";
+            } else {
+                billBar.style.transform = "translateY(100%)";
+            }
+
+            renderCartModalItems();
+        }
+
+        // Bounce notification animation on selection
+        function animateBillBar() {
+            const bar = document.getElementById("bill-bar");
+            bar.classList.add("scale-[1.015]");
+            setTimeout(() => {
+                bar.classList.remove("scale-[1.015]");
+            }, 120);
+        }
+
+        // Erase calculator list
+        function clearCart() {
+            cart = {};
+            updateCartDisplay();
+            toggleCartModal(false);
+        }
+
+        // Modify order count from calculator
+        function updateQty(id, delta) {
+            if (!cart[id]) return;
+            cart[id].qty += delta;
+            if (cart[id].qty <= 0) {
+                delete cart[id];
+            }
+            updateCartDisplay();
+        }
+
+        // Populate items inside order modal drawer
+        function renderCartModalItems() {
+            const container = document.getElementById("cart-modal-items");
+            container.innerHTML = '';
+
+            const keys = Object.keys(cart);
+            if (keys.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 text-stone-400 font-medium">
+                        <p class="text-sm">კალათა ცარიელია</p>
+                    </div>
+                `;
+                return;
+            }
+
+            keys.forEach(id => {
+                const item = cart[id];
+                const row = document.createElement("div");
+                row.className = "flex items-center justify-between border-b border-stone-100 pb-3";
+                row.innerHTML = `
+                    <div>
+                        <h4 class="font-extrabold text-[#3E110B] text-sm">${item.title}</h4>
+                        <p class="text-xs text-[#8C251C] font-bold">${item.price.toFixed(2)} ₾</p>
+                    </div>
+                    <div class="flex items-center gap-3 bg-orange-50/50 px-3 py-1.5 rounded-lg border border-[#8C251C]/15">
+                        <button onclick="updateQty('${id}', -1)" class="w-6 h-6 flex items-center justify-center bg-white text-stone-900 hover:bg-orange-100 rounded-md text-xs font-bold transition shadow-xs border border-stone-200">-</button>
+                        <span class="text-xs font-bold text-stone-900 w-4 text-center">${item.qty}</span>
+                        <button onclick="updateQty('${id}', 1)" class="w-6 h-6 flex items-center justify-center bg-white text-stone-900 hover:bg-orange-100 rounded-md text-xs font-bold transition shadow-xs border border-stone-200">+</button>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        // Toggle order modal visibility
+        function toggleCartModal(open) {
+            const modal = document.getElementById("cart-modal");
+            const modalContent = modal.querySelector("div");
+            if (open) {
+                modal.classList.remove("hidden");
+                setTimeout(() => {
+                    modalContent.style.transform = "translateY(0)";
+                }, 10);
+            } else {
+                modalContent.style.transform = "translateY(100%)";
+                setTimeout(() => {
+                    modal.classList.add("hidden");
+                }, 300);
+            }
+        }
+    </script>
+</body>
+</html>
