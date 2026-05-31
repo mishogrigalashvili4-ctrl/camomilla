@@ -55,10 +55,10 @@
 
     <!-- Top Banner: Classic Italian Pizzeria Header -->
     <div class="bg-[#8C251C] text-white text-xs py-2.5 px-4 flex justify-between items-center sticky top-0 z-50 shadow-md">
-        <div class="flex items-center gap-1.5">
+        <a id="header-loc" href="https://maps.app.goo.gl/ex6CPSbimAz7QNaBA?g_st=ic" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 hover:text-orange-200 transition-colors">
             <i data-lucide="flame" class="w-4 h-4 text-orange-400 animate-pulse"></i>
-            <span id="header-loc" class="font-medium tracking-wide text-orange-100">მცხეთა, აღმაშენებლის 144 • Wood-Fired Kitchen</span>
-        </div>
+            <span class="font-medium tracking-wide text-orange-100">მცხეთა, აღმაშენებლის 144 • Wood-Fired Kitchen</span>
+        </a>
         <button onclick="toggleLanguage()" class="bg-[#6E1C15] hover:bg-[#571610] text-white px-3 py-1 rounded-md font-bold tracking-wider transition-all text-[11px] uppercase border border-red-900/40">
             <span id="lang-btn-text">EN</span>
         </button>
@@ -229,11 +229,11 @@
             <!-- Essential Info Items: Upgraded to a multi-column responsive layout -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 text-center">
                 <!-- Location -->
-                <div class="space-y-1.5">
-                    <p class="text-[#8C251C] font-extrabold uppercase tracking-widest text-[10px]" id="footer-loc-label">მდებარეობა</p>
-                    <p class="text-white text-sm font-semibold">მცხეთა, აღმაშენებლის 144</p>
+                <a href="https://maps.app.goo.gl/ex6CPSbimAz7QNaBA?g_st=ic" target="_blank" rel="noopener noreferrer" class="space-y-1.5 block group hover:opacity-90 transition-opacity">
+                    <p class="text-[#8C251C] font-extrabold uppercase tracking-widest text-[10px] group-hover:text-orange-400 transition-colors" id="footer-loc-label">მდებარეობა</p>
+                    <p class="text-white text-sm font-semibold group-hover:text-orange-300 transition-colors underline decoration-[#8C251C] underline-offset-4 decoration-2">მცხეთა, აღმაშენებლის 144</p>
                     <p class="text-[10px] text-stone-500">Mtskheta, Georgia - Near Historic Center</p>
-                </div>
+                </a>
 
                 <!-- Hours -->
                 <div class="space-y-1.5">
@@ -532,7 +532,7 @@
         function updateUI() {
             const trans = uiTranslations[currentLang];
             
-            document.getElementById("header-loc").innerHTML = `<i data-lucide="flame" class="w-4 h-4 text-orange-400 inline mr-1 animate-pulse"></i> ${trans["header-loc"]}`;
+            document.getElementById("header-loc").innerHTML = `<i data-lucide="flame" class="w-4 h-4 text-orange-400 inline mr-1 animate-pulse"></i> <span>${trans["header-loc"]}</span>`;
             document.getElementById("lang-btn-text").textContent = trans["lang-btn-text"];
             document.getElementById("hero-tagline").textContent = trans["hero-tagline"];
             document.getElementById("since-est").textContent = trans["since-est"];
